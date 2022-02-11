@@ -7,29 +7,29 @@ The easiest is to clone Dappman in a directory outside of GOPATH, as in the foll
 ```
 mkdir $HOME/src
 cd $HOME/src
-git clone https://github.com/connorjcantrell/dappman.git
-cd dappman
+git clone https://github.com/connorjcantrell/dapper.git
+cd dapper
 go install
 ```
 
 ## Create Environment Variables
-- `ALGORAND_ADDRESS`
 - `ALGORAND_PASSPHRASE`
 - `ALGOD_ADDRESS`
 - `ALGOD_TOKEN`
+- `DAPPER_TEMPLATES`
 
 ## Getting Started
-Initialize dappman inside a project directory:
+Initialize dapper inside a project directory:
 ```
-dappman init --name my-app --global-byteslices 0 -global-ints 0 --local-byteslices 0 --local-ints 0 --pyteal
-
+dapper init --global-byteslices 0 -global-ints 0 --local-byteslices 0 --local-ints 0 --boilerplate pyteal
 ```
-or use the shorthand, `dappman init 0 0 0 0 --pyteal`
 
 This will generate the following project structure:
 ```
 project
-│   .config.json
+│
+└───.dapper
+    │   config.json 
 │
 └───public
 │   
@@ -45,24 +45,26 @@ Application ID is initially set to `0` to signify the app has not yet been creat
 #### `.config.json`
 ```
 {
-    "name": "my-app",
-    "application_id": 0,
-    "global_schema": {
-        "byteslices": 0,
-        "ints": 0
-    },
-    "local_schema": {
-        "byteslices": 0,
-        "ints": 0
-    },
-    "revision": 0,
-    "deleted": 0
+	"application_id": 0,
+	"block": 0,
+	"creator": "",
+	"revision": 0,
+	"deleted": false,
+	"global_state_schema": {
+		"num_byte_slice": 0,
+		"num_uint": 10
+	},
+	"local_state_schema": {
+		"num_byte_slice": 0,
+		"num_uint": 0
+	}
 }
+
 ```
 
 ## Compile
 ```
-dappman compile pyteal
+dapper compile pyteal
 ```
 1. Searches for `approval_program.py` and `clear_state_program.py` in `/src` directory
 2. Compiles PyTeal down to TEAL, writes TEAL programs to `/public` directory
@@ -70,7 +72,9 @@ dappman compile pyteal
 
 ```
 project
-│   .config.json
+│
+└───.dapper
+    │   config.json 
 │
 └───public
 │   │   approval_program.teal
@@ -84,7 +88,7 @@ project
 ## Create
 Issue a transaction that creates an application
 ```
-dappman create
+dapper create
 ```
 #### `.config.json` modifications
 `application_id` will be changed from `0`
@@ -94,7 +98,7 @@ dappman create
 ## Update
 Issue a transaction that updates an application's ApprovalProgram and ClearStateProgram
 ```
-dappman update
+dapper update
 ```
 
 #### `.config.json` modifications
@@ -103,7 +107,7 @@ dappman update
 
 ## Delete
 ```
-dappman delete
+dapper delete
 ```
 #### `.config.json` modifications
 `deleted` changed to `true`
