@@ -11,13 +11,13 @@ import (
 )
 
 type Fs struct {
-	TemplatesDir string
-	WorkingDir   string
+	BoilerplateDir string
+	WorkingDir     string
 }
 
 func NewFs() (Fs, error) {
-	templatesDir := os.Getenv("DAPPER_TEMPLATES")
-	exists, err := exists(templatesDir)
+	boilerplateDir := os.Getenv("DAPPER_BOILERPLATE_DIR")
+	exists, err := exists(boilerplateDir)
 	if err != nil {
 		return Fs{}, err
 	}
@@ -31,8 +31,8 @@ func NewFs() (Fs, error) {
 	}
 
 	fs := Fs{
-		TemplatesDir: templatesDir,
-		WorkingDir:   workingDir,
+		BoilerplateDir: boilerplateDir,
+		WorkingDir:     workingDir,
 	}
 	return fs, nil
 }
@@ -42,16 +42,6 @@ func (fs *Fs) Mkdir(s string) error {
 	if err != nil {
 		return err
 	}
-	return nil
-}
-
-func (fs *Fs) Touch(s string) error {
-	p := filepath.Join(fs.WorkingDir, s)
-	emptyFile, err := os.Create(p)
-	if err != nil {
-		return err
-	}
-	emptyFile.Close()
 	return nil
 }
 
@@ -69,12 +59,12 @@ func (fs *Fs) WriteConfig(s interface{}) error {
 }
 
 /*
-CopyFromTemplatesTemplate attempts to copy files from "~/dapper/templates/{dir}" to
+CopyFromBoilerplate attempts to copy all files from "~/boilerplate/{dir}" to
 "path-to-project/src"
 */
-func (fs *Fs) CopyFromTemplates(dir string) error {
-	templates := filepath.Join(fs.TemplatesDir, dir)
-	if _, err := exists(templates); err != nil {
+func (fs *Fs) CopyFromBoilerplate(dir string) error {
+	boilerplate := filepath.Join(fs.BoilerplateDir, dir)
+	if _, err := exists(boilerplate); err != nil {
 		return err
 	}
 	dst := filepath.Join(fs.WorkingDir, "src")
@@ -82,13 +72,13 @@ func (fs *Fs) CopyFromTemplates(dir string) error {
 		return err
 	}
 
-	files, err := ioutil.ReadDir(templates)
+	files, err := ioutil.ReadDir(boilerplate)
 	if err != nil {
 		return err
 	}
 
 	for _, f := range files {
-		srcPath := filepath.Join(templates, f.Name())
+		srcPath := filepath.Join(boilerplate, f.Name())
 		dstPath := filepath.Join(dst, f.Name())
 		err := CopyFile(srcPath, dstPath)
 		if err != nil {
