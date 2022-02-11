@@ -1,4 +1,4 @@
-# Dappman 
+# Dapper
 #### Decentralized Application Manager for the Algorand Blockchain
 Dappman is a Golang CLI toolkit for compiling, deploying, and managing Algorand applications. It is a thin wrapper built on top of [goal app](https://developer.algorand.org/docs/clis/goal/app/app/)
 
