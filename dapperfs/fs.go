@@ -44,16 +44,6 @@ func (fs *Fs) Mkdir(s string) error {
 	return nil
 }
 
-func (fs *Fs) Touch(s string) error {
-	p := filepath.Join(fs.WorkingDir, s)
-	emptyFile, err := os.Create(p)
-	if err != nil {
-		return err
-	}
-	emptyFile.Close()
-	return nil
-}
-
 func (fs *Fs) WriteConfig(s interface{}) error {
 	configJson, err := json.MarshalIndent(s, "", "\t")
 	if err != nil {
@@ -68,13 +58,14 @@ func (fs *Fs) WriteConfig(s interface{}) error {
 }
 
 /*
-CopyFromBoilerplateBoilerplate attempts to copy files from "~/dapper/boilerplate/{dir}" to
+CopyFromBoilerplate attempts to copy all files from "~/boilerplate/{dir}" to
 "path-to-project/src"
 */
 func (fs *Fs) CopyFromBoilerplate(dir string) error {
 	boilerplate := filepath.Join(fs.BoilerplateDir, dir)
 	dst := filepath.Join(fs.WorkingDir, "src")
 	files, err := os.ReadDir(boilerplate)
+
 	if err != nil {
 		return err
 	}
