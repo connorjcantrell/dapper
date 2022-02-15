@@ -39,7 +39,6 @@ to quickly create a Cobra application.`,
 		// Create project directories
 		fs.Mkdir(".dapper")
 		fs.Mkdir("src")
-		fs.Mkdir("public")
 
 		// Write boilerplate code if boilerplate flag was provided
 		if cmd.Flags().Changed("boilerplate") {
