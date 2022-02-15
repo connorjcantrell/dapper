@@ -31,7 +31,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fs, err := dapperfs.NewFs()
+		fs, err := dapperfs.New()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -42,7 +42,7 @@ to quickly create a Cobra application.`,
 
 		// Write boilerplate code if boilerplate flag was provided
 		if cmd.Flags().Changed("boilerplate") {
-			fs.CopyFromBoilerplate(boilerplate)
+			fs.CopyFromBoilerplateDir(boilerplate)
 		}
 
 		config := config.ApplicationDetails{
@@ -55,7 +55,7 @@ to quickly create a Cobra application.`,
 				NumUint:      localInts,
 			},
 		}
-		err = fs.WriteConfig(config)
+		err = fs.WriteStructToJSON(config, ".dapper", "config.json")
 		if err != nil {
 			log.Fatal(err)
 		}
