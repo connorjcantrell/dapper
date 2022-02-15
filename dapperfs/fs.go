@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -51,7 +50,7 @@ func (fs *Fs) WriteConfig(s interface{}) error {
 		return err
 	}
 	p := filepath.Join(fs.WorkingDir, ".dapper", "config.json")
-	if err := ioutil.WriteFile(p, configJson, 0644); err != nil {
+	if err := os.WriteFile(p, configJson, 0644); err != nil {
 		fmt.Println(err)
 		return err
 	}
@@ -64,15 +63,9 @@ CopyFromBoilerplate attempts to copy all files from "~/boilerplate/{dir}" to
 */
 func (fs *Fs) CopyFromBoilerplate(dir string) error {
 	boilerplate := filepath.Join(fs.BoilerplateDir, dir)
-	if _, err := exists(boilerplate); err != nil {
-		return err
-	}
 	dst := filepath.Join(fs.WorkingDir, "src")
-	if _, err := exists(dst); err != nil {
-		return err
-	}
+	files, err := os.ReadDir(boilerplate)
 
-	files, err := ioutil.ReadDir(boilerplate)
 	if err != nil {
 		return err
 	}

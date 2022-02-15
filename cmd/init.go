@@ -43,7 +43,7 @@ to quickly create a Cobra application.`,
 
 		// Write boilerplate code if boilerplate flag was provided
 		if cmd.Flags().Changed("boilerplate") {
-			fs.CopyFromTemplates(boilerplate)
+			fs.CopyFromBoilerplate(boilerplate)
 		}
 
 		config := config.ApplicationDetails{
